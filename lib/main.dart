@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+import 'quiz_brain.dart';
 
 void main() => runApp(Quizzler());
 
@@ -7,10 +10,10 @@ class Quizzler extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Colors.teal,
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: 0.0),
             child: QuizPage(),
           ),
         ),
@@ -25,19 +28,75 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Widget> scorekeeper = [];
+  void checkAnswer(bool chosenAnswer) {
+    setState(() {
+      if (quiz.getAnswer() == chosenAnswer) {
+        scorekeeper.add(Icon(Icons.check, color: Colors.green, size: 30));
+      } else {
+        scorekeeper.add(Icon(Icons.close, color: Colors.red, size: 30));
+      }
+
+      quiz.nextQuestion();
+      if (quiz.isFinished()) {
+        scorekeeper.clear();
+        var alertStyle = AlertStyle(
+          animationType: AnimationType.fromTop,
+          isCloseButton: false,
+          isOverlayTapDismiss: false,
+          descStyle: TextStyle(fontWeight: FontWeight.bold),
+          animationDuration: Duration(milliseconds: 500),
+          alertBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            side: BorderSide(
+              color: Colors.grey,
+            ),
+          ),
+          titleStyle: TextStyle(
+            color: Colors.teal,
+            fontSize: 30,
+          ),
+        );
+        Alert(
+          context: context,
+          style: alertStyle,
+          type: AlertType.info,
+          title: "Quiz Complete",
+          desc: "Thank You For Playing",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Restart",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Colors.blueGrey,
+              radius: BorderRadius.circular(5.0),
+            ),
+          ],
+        ).show();
+      }
+    });
+  }
+
+  QuizBrain quiz = QuizBrain();
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+        AppBar(
+          title: Center(child: Text('Quiz App')),
+          backgroundColor: Colors.teal,
+        ),
         Expanded(
           flex: 5,
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quiz.getQuestion(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -61,7 +120,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                checkAnswer(true);
               },
             ),
           ),
@@ -79,12 +138,14 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                checkAnswer(false);
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(
+          children: scorekeeper,
+        ),
       ],
     );
   }
