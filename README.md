@@ -1,5 +1,5 @@
 
-# Quizzler ❓
+# Quiz App Using Flutter
 
 ## Goal
 Stateful and Stateless Widgets as well as learning about the fundamental building blocks of Object Oriented Programming (OOP) - Classes and Objects. 
@@ -9,7 +9,7 @@ Stateful and Stateless Widgets as well as learning about the fundamental buildin
 
 This is a quiz app that tests your general knowledge. As one of the most popular types of apps on the app stores, you can create your own quiz for other people to enjoy!
 
-![Finished App](https://github.com/londonappbrewery/Images/blob/master/quizzler-demo.gif)
+//
 
 ## What did I learn
 
@@ -21,4 +21,3 @@ This is a quiz app that tests your general knowledge. As one of the most popular
 - How to use Dart lists.
 - The difference between var, const and final.
 
-![End Banner](https://github.com/londonappbrewery/Images/blob/master/readme-end-banner.png)
